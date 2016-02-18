@@ -9,11 +9,17 @@ yum install -y git python-pip python-devel gcc
 echo "installing ansible"
 pip install ansible
 
-# set ntp timezone
-echo "setting timezone to America/Los_Angles"
-timedatectl set-timezone America/Los_Angeles
-
-# make our git repository and pull OSAD source
-echo "Cloning ansible-master repo from git"
+# make our git repository and pull ansible-master 
+echo "cloning ansible-master repo from git"
 mkdir /opt/ansible-master
+
+# add (-b [branch]) to test pull requests
 git clone https://github.com/osu-sig/ansible-master /opt/ansible-master
+
+# install roles
+pushd /opt/ansible-master
+echo "installing roles from ansible-galaxy"
+/opt/ansible-master/role-it-up.sh
+popd
+
+ssh-keyscan -f /vagrant/inventory >> /home/vagrant/.ssh/known_hosts
